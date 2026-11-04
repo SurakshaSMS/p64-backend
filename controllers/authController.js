@@ -68,6 +68,13 @@ const AuthController = {
         },
       });
     } catch (error) {
+      if (error.code === 6 || error.code === "already-exists") {
+        return res.status(409).json({
+          success: false,
+          message: "Email is already registered",
+        });
+      }
+
       console.error("Register error:", error);
 
       return res.status(500).json({

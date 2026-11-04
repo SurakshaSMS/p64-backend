@@ -1,11 +1,19 @@
+
 const { db } = require("../config/firebase");
 
 const COLLECTION_NAME = "users";
 
+const normalizeEmail = (email) => email.trim().toLowerCase();
+
 const UserModel = {
   async createUser(userData) {
-    const docRef = await db.collection(COLLECTION_NAME).add({
+    const normalizedEmail = normalizeEmail(userData.email);
+
+    const docRef = db.collection(COLLECTION_NAME).doc(normalizedEmail);
+
+    await docRef.create({
       ...userData,
+      email: normalizedEmail,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -19,18 +27,16 @@ const UserModel = {
   },
 
   async findUserByEmail(email) {
-    const normalizedEmail = email.trim().toLowerCase();
-    const snapshot = await db
+    const normalizedEmail = normalizeEmail(email);
+
+    const doc = await db
       .collection(COLLECTION_NAME)
-      .where("email", "==", normalizedEmail)
-      .limit(1)
+      .doc(normalizedEmail)
       .get();
 
-    if (snapshot.empty) {
+    if (!doc.exists) {
       return null;
     }
-
-    const doc = snapshot.docs[0];
 
     return {
       id: doc.id,
