@@ -11,7 +11,7 @@ const generateAccessToken = (user) => {
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRES_IN,
-    }
+    },
   );
 };
 
@@ -32,10 +32,13 @@ const AuthController = {
         });
       }
 
-      if (password.length < 6) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+      if (!passwordRegex.test(password)) {
         return res.status(400).json({
           success: false,
-          message: "Password must be at least 6 characters",
+          message:
+            "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number",
         });
       }
 
