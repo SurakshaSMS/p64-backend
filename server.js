@@ -3,6 +3,15 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const requiredEnv = ["JWT_SECRET", "JWT_EXPIRES_IN", "PORT"];
+
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+
+if (missingEnv.length > 0) {
+  console.error(`Missing environment variables: ${missingEnv.join(", ")}`);
+  process.exit(1);
+}
+
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
