@@ -39,7 +39,8 @@ const AuthController = {
         });
       }
 
-      const existingUser = await UserModel.findUserByEmail(email);
+      const normalizedEmail = email.trim().toLowerCase();
+      const existingUser = await UserModel.findUserByEmail(normalizedEmail);
 
       if (existingUser) {
         return res.status(409).json({
@@ -87,7 +88,8 @@ const AuthController = {
         });
       }
 
-      const user = await UserModel.findUserByEmail(email);
+      const normalizedEmail = email.trim().toLowerCase();
+      const user = await UserModel.findUserByEmail(normalizedEmail);
 
       if (!user) {
         return res.status(401).json({

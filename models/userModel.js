@@ -19,9 +19,10 @@ const UserModel = {
   },
 
   async findUserByEmail(email) {
+    const normalizedEmail = email.trim().toLowerCase();
     const snapshot = await db
       .collection(COLLECTION_NAME)
-      .where("email", "==", email)
+      .where("email", "==", normalizedEmail)
       .limit(1)
       .get();
 
