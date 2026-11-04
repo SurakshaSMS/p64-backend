@@ -56,7 +56,7 @@ const AuthController = {
 
       const user = await UserModel.createUser({
         name,
-        email,
+        normalizedEmail,
         password: hashedPassword,
       });
 
